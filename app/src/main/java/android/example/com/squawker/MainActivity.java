@@ -34,6 +34,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -92,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements
         String token = FirebaseInstanceId.getInstance().getToken();
         String msg = getString(R.string.message_token_format, token);
         Log.d(LOG_TAG, msg);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.containsKey("test")) {
+            Toast.makeText(this, extras.getString("test"), Toast.LENGTH_LONG).show();
+        }
 
     }
 

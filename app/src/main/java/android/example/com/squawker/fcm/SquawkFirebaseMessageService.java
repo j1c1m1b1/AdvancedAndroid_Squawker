@@ -49,6 +49,7 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
 
     private static final int NOTIFICATION_MAX_CHARACTERS = 30;
     private static String LOG_TAG = SquawkFirebaseMessageService.class.getSimpleName();
+    private static AsyncTask<Void, Void, Void> saveMessageTask;
 
     /**
      * Called when message is received.
@@ -98,7 +99,7 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
     private void insertSquawk(final Map<String, String> data) {
 
         // Database operations should not be done on the main thread
-        AsyncTask<Void, Void, Void> insertSquawkTask = new AsyncTask<Void, Void, Void>() {
+        saveMessageTask = new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -112,7 +113,7 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
             }
         };
 
-        insertSquawkTask.execute();
+        saveMessageTask.execute();
     }
 
 
@@ -148,7 +149,8 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        if(notificationManager != null) {
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        }
     }
 }
